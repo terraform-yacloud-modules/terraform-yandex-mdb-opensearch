@@ -108,7 +108,7 @@ variable "opensearch_plugins" {
 #
 variable "opensearch_nodes" {
   description = <<EOF
-    (Required) A map that contains information about OpenSearch cluster nodes.
+    A map that contains information about OpenSearch cluster nodes.
     Configuration attributes:
       resources        - (Required) Resources allocated to hosts of this OpenSearch node group.
       hosts_count      - (Required) Number of hosts in this node group.

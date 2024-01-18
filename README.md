@@ -16,13 +16,14 @@ maintainers to test your changes and to keep the examples up to date for users. 
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3, < 1.6 |
+| <a name="requirement_yandex"></a> [yandex](#requirement\_yandex) | >= 3.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
 | <a name="provider_random"></a> [random](#provider\_random) | n/a |
-| <a name="provider_yandex"></a> [yandex](#provider\_yandex) | n/a |
+| <a name="provider_yandex"></a> [yandex](#provider\_yandex) | >= 3.0 |
 
 ## Modules
 
@@ -53,7 +54,7 @@ No modules.
 | <a name="input_maintenance_window_type"></a> [maintenance\_window\_type](#input\_maintenance\_window\_type) | Type of maintenance window. A day and hour of window need to be specified with weekly window. | `string` | `"ANYTIME"` | no |
 | <a name="input_name"></a> [name](#input\_name) | OpenSearch cluster name | `string` | n/a | yes |
 | <a name="input_network_id"></a> [network\_id](#input\_network\_id) | ID of the network, to which the OpenSearch cluster belongs. | `string` | n/a | yes |
-| <a name="input_opensearch_nodes"></a> [opensearch\_nodes](#input\_opensearch\_nodes) | (Required) A map that contains information about OpenSearch cluster nodes.<br>    Configuration attributes:<br>      resources        - (Required) Resources allocated to hosts of this OpenSearch node group.<br>      hosts\_count      - (Required) Number of hosts in this node group.<br>      zones\_ids        - (Required) A set of availability zones where hosts of node group may be allocated.<br>      subnet\_ids       - (Optional) A set of the subnets, to which the hosts belongs. The subnets must be a part of the network to which the cluster belongs.<br>      assign\_public\_ip - (Optional) Sets whether the hosts should get a public IP address on creation.<br>      roles            - (Optional) A set of OpenSearch roles assigned to hosts. | <pre>map(object({<br>    resources = object({<br>      resource_preset_id = string<br>      disk_size          = string<br>      disk_type_id       = string<br>    })<br>    hosts_count = number<br>    zones_ids = optional(<br>      list(string), ["ru-central1-a", "ru-central1-b", "ru-central1-c"]<br>    )<br>    subnet_ids       = optional(list(string))<br>    assign_public_ip = bool<br>    roles            = optional(list(string))<br>  }))</pre> | `{}` | no |
+| <a name="input_opensearch_nodes"></a> [opensearch\_nodes](#input\_opensearch\_nodes) | A map that contains information about OpenSearch cluster nodes.<br>    Configuration attributes:<br>      resources        - (Required) Resources allocated to hosts of this OpenSearch node group.<br>      hosts\_count      - (Required) Number of hosts in this node group.<br>      zones\_ids        - (Required) A set of availability zones where hosts of node group may be allocated.<br>      subnet\_ids       - (Optional) A set of the subnets, to which the hosts belongs. The subnets must be a part of the network to which the cluster belongs.<br>      assign\_public\_ip - (Optional) Sets whether the hosts should get a public IP address on creation.<br>      roles            - (Optional) A set of OpenSearch roles assigned to hosts. | <pre>map(object({<br>    resources = object({<br>      resource_preset_id = string<br>      disk_size          = string<br>      disk_type_id       = string<br>    })<br>    hosts_count = number<br>    zones_ids = optional(<br>      list(string), ["ru-central1-a", "ru-central1-b", "ru-central1-c"]<br>    )<br>    subnet_ids       = optional(list(string))<br>    assign_public_ip = bool<br>    roles            = optional(list(string))<br>  }))</pre> | `{}` | no |
 | <a name="input_opensearch_plugins"></a> [opensearch\_plugins](#input\_opensearch\_plugins) | A set of requested OpenSearch plugins. | `list(string)` | `[]` | no |
 | <a name="input_opensearch_version"></a> [opensearch\_version](#input\_opensearch\_version) | Version of OpenSearch. | `string` | `null` | no |
 | <a name="input_security_group_ids"></a> [security\_group\_ids](#input\_security\_group\_ids) | A set of ids of security groups assigned to hosts of the cluster. | `list(string)` | `[]` | no |
