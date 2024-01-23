@@ -118,14 +118,14 @@ variable "opensearch_nodes" {
       roles            - (Optional) A set of OpenSearch roles assigned to hosts.
   EOF
   nullable    = false
-  type        = map(object({
+  type = map(object({
     resources = object({
       resource_preset_id = string
       disk_size          = string
       disk_type_id       = string
     })
     hosts_count = number
-    zones_ids   = optional(
+    zones_ids = optional(
       list(string), ["ru-central1-a", "ru-central1-b", "ru-central1-c"]
     )
     subnet_ids       = optional(list(string))
@@ -150,14 +150,14 @@ variable "dashboard_nodes" {
       roles            - (Optional) A set of OpenSearch roles assigned to hosts.
   EOF
   nullable    = false
-  type        = map(object({
+  type = map(object({
     resources = object({
       resource_preset_id = string
       disk_size          = string
       disk_type_id       = string
     })
     hosts_count = number
-    zones_ids   = optional(
+    zones_ids = optional(
       list(string), ["ru-central1-a", "ru-central1-b", "ru-central1-c"]
     )
     subnet_ids       = optional(list(string), [])

@@ -18,14 +18,13 @@ maintainers to test your changes and to keep the examples up to date for users. 
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3, < 1.6 |
-| <a name="requirement_yandex"></a> [yandex](#requirement\_yandex) | >= 3.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
 | <a name="provider_random"></a> [random](#provider\_random) | n/a |
-| <a name="provider_yandex"></a> [yandex](#provider\_yandex) | >= 3.0 |
+| <a name="provider_yandex"></a> [yandex](#provider\_yandex) | n/a |
 
 ## Modules
 
@@ -44,7 +43,7 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_admin_password"></a> [admin\_password](#input\_admin\_password) | Password for admin user of OpenSearch. Will be omitted, if generate\_admin\_password is true | `string` | `null` | no |
-| <a name="input_dashboard_nodes"></a> [dashboard\_nodes](#input\_dashboard\_nodes) | (Required) A map that contains information about OpenSearch dashboard nodes.<br>    Configuration attributes:<br>      resources        - (Required) Resources allocated to hosts of this OpenSearch node group.<br>      hosts\_count      - (Required) Number of hosts in this node group.<br>      zones\_ids        - (Required) A set of availability zones where hosts of node group may be allocated.<br>      subnet\_ids       - (Optional) A set of the subnets, to which the hosts belongs. The subnets must be a part of the network to which the cluster belongs.<br>      assign\_public\_ip - (Optional) Sets whether the hosts should get a public IP address on creation.<br>      roles            - (Optional) A set of OpenSearch roles assigned to hosts. | <pre>map(object({<br>    resources = object({<br>      resource_preset_id = string<br>      disk_size          = string<br>      disk_type_id       = string<br>    })<br>    hosts_count = number<br>    zones_ids = optional(<br>      list(string), ["ru-central1-a", "ru-central1-b", "ru-central1-c"]<br>    )<br>    subnet_ids       = optional(list(string))<br>    assign_public_ip = bool<br>  }))</pre> | `{}` | no |
+| <a name="input_dashboard_nodes"></a> [dashboard\_nodes](#input\_dashboard\_nodes) | A map that contains information about OpenSearch dashboard nodes.<br>    Configuration attributes:<br>      resources        - (Required) Resources allocated to hosts of this OpenSearch node group.<br>      hosts\_count      - (Required) Number of hosts in this node group.<br>      zones\_ids        - (Required) A set of availability zones where hosts of node group may be allocated.<br>      subnet\_ids       - (Optional) A set of the subnets, to which the hosts belongs. The subnets must be a part of the network to which the cluster belongs.<br>      assign\_public\_ip - (Optional) Sets whether the hosts should get a public IP address on creation.<br>      roles            - (Optional) A set of OpenSearch roles assigned to hosts. | <pre>map(object({<br>    resources = object({<br>      resource_preset_id = string<br>      disk_size          = string<br>      disk_type_id       = string<br>    })<br>    hosts_count = number<br>    zones_ids = optional(<br>      list(string), ["ru-central1-a", "ru-central1-b", "ru-central1-c"]<br>    )<br>    subnet_ids       = optional(list(string), [])<br>    assign_public_ip = bool<br>  }))</pre> | `{}` | no |
 | <a name="input_deletion_protection"></a> [deletion\_protection](#input\_deletion\_protection) | Inhibits deletion of the cluster. | `bool` | `false` | no |
 | <a name="input_description"></a> [description](#input\_description) | OpenSearch cluster description | `string` | `""` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Deployment environment of the OpenSearch cluster | `string` | `"PRODUCTION"` | no |
