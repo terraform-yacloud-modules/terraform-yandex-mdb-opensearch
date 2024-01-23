@@ -45,7 +45,6 @@ resource "yandex_mdb_opensearch_cluster" "main" {
       }
     }
 
-
     dynamic "dashboards" {
       for_each = length(var.dashboard_nodes) > 0 ? [1] : []
       content {
