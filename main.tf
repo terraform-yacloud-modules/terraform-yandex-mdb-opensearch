@@ -45,24 +45,27 @@ resource "yandex_mdb_opensearch_cluster" "main" {
       }
     }
 
-    dashboards {
-      dynamic "node_groups" {
-        for_each = var.dashboard_nodes
-        content {
-          name             = node_groups.key
-          hosts_count      = node_groups.value.hosts_count
-          zone_ids         = node_groups.value.zones_ids
-          subnet_ids       = node_groups.value.subnet_ids
-          assign_public_ip = node_groups.value.assign_public_ip
-
-          resources {
-            resource_preset_id = node_groups.value.resources.resource_preset_id
-            disk_size          = node_groups.value.resources.disk_size
-            disk_type_id       = node_groups.value.resources.disk_type_id
-          }
-        }
-      }
-    }
+#    dynamic "dashboards" {
+#      for_each = length(var.dashboard_nodes) > 0 ? [1] : []
+#      content {
+#        dynamic "node_groups" {
+#          for_each = var.dashboard_nodes
+#          content {
+#            name             = node_groups.key
+#            hosts_count      = node_groups.value.hosts_count
+#            zone_ids         = node_groups.value.zones_ids
+#            subnet_ids       = node_groups.value.subnet_ids
+#            assign_public_ip = node_groups.value.assign_public_ip
+#
+#            resources {
+#              resource_preset_id = node_groups.value.resources.resource_preset_id
+#              disk_size          = node_groups.value.resources.disk_size
+#              disk_type_id       = node_groups.value.resources.disk_type_id
+#            }
+#          }
+#        }
+#      }
+#    }
   }
 
   maintenance_window {
