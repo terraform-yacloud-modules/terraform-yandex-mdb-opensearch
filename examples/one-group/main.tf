@@ -1,12 +1,12 @@
 module "opensearch" {
   source = "../../"
 
-  name                        = "test-opensearch"
-  environment                 = "PRESTABLE"
-  network_id                  = "xxx"
-  folder_id                   = "xxx"
-  generate_admin_password     = false
-  admin_password              = "super-password"
+  name                    = "test-opensearch"
+  environment             = "PRESTABLE"
+  network_id              = "xxx"
+  folder_id               = "xxx"
+  generate_admin_password = false
+  admin_password          = "super-password"
 
   opensearch_nodes = {
     group0 = {
@@ -23,9 +23,9 @@ module "opensearch" {
     }
   }
 
-  dashboard_nodes             = {}
+  dashboard_nodes = {}
 
-  maintenance_window_type     = "WEEKLY"
-  maintenance_window_hour     = 2
-  maintenance_window_day      = "SUN"
+  maintenance_window_type = "WEEKLY"
+  maintenance_window_hour = 2
+  maintenance_window_day  = "SUN"
 }
