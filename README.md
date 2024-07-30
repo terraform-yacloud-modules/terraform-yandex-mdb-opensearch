@@ -17,7 +17,7 @@ maintainers to test your changes and to keep the examples up to date for users. 
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3, < 1.6 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | >= 3.1.0 |
 | <a name="requirement_yandex"></a> [yandex](#requirement\_yandex) | >= 0.72.0 |
 
