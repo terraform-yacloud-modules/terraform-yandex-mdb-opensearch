@@ -25,8 +25,7 @@ module "opensearch" {
   environment             = "PRESTABLE"
   network_id              = module.network.vpc_id
   folder_id               = data.yandex_client_config.client.folder_id
-  generate_admin_password = false
-  admin_password          = "super-password"
+  generate_admin_password = true
 
   opensearch_nodes = {
     group0 = {
