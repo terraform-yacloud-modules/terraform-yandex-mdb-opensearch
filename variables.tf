@@ -40,7 +40,7 @@ variable "labels" {
 # OpenSearch common settings
 #
 variable "environment" {
-  description = "Deployment environment of the OpenSearch cluster"
+  description = "The deployment environment of the OpenSearch cluster. PRESTABLE is for testing and development, PRODUCTION is for production workloads with higher availability and performance guarantees."
   type        = string
   validation {
     condition = contains([
@@ -52,13 +52,13 @@ variable "environment" {
 }
 
 variable "service_account_id" {
-  description = "ID of the service account authorized for this cluster."
+  description = "The ID of the service account that will be used by the OpenSearch cluster for accessing other Yandex Cloud resources. If not specified, a default service account will be used."
   type        = string
   default     = null
 }
 
 variable "deletion_protection" {
-  description = "Inhibits deletion of the cluster."
+  description = "Enables deletion protection for the OpenSearch cluster. When enabled, prevents accidental deletion of the cluster and its data."
   type        = bool
   default     = false
 }
@@ -81,18 +81,18 @@ variable "security_group_ids" {
 # OpenSearch config
 #
 variable "opensearch_version" {
-  description = "Version of OpenSearch."
+  description = "The version of OpenSearch to deploy. If not specified, the latest available version will be used."
   type        = string
   default     = null
 }
 
 variable "generate_admin_password" {
-  description = "If true, admin password for OpenSearch cluster will be generated."
+  description = "If true, a random admin password will be generated for the OpenSearch cluster. If false, the admin_password variable must be provided."
   type        = bool
   default     = true
 }
 variable "admin_password" {
-  description = "Password for admin user of OpenSearch. Will be omitted, if generate_admin_password is true"
+  description = "The password for the admin user of the OpenSearch cluster. Only used if generate_admin_password is false. Must be at least 8 characters long."
   type        = string
   default     = null
 }
@@ -170,7 +170,7 @@ variable "dashboard_nodes" {
 # OpenSearch maintenance
 #
 variable "maintenance_window_type" {
-  description = "Type of maintenance window. A day and hour of window need to be specified with weekly window."
+  description = "The type of maintenance window for the OpenSearch cluster. ANYTIME allows maintenance at any time, WEEKLY requires specifying a specific day and hour."
   type        = string
   validation {
     condition = contains([
@@ -182,7 +182,7 @@ variable "maintenance_window_type" {
 }
 
 variable "maintenance_window_hour" {
-  description = "Hour of day in UTC time zone (1-24) for maintenance window if window type is weekly."
+  description = "The hour of day in UTC time zone (0-24) for the weekly maintenance window. Only used when maintenance_window_type is WEEKLY."
   type        = number
   validation {
     condition     = var.maintenance_window_hour >= 0 && var.maintenance_window_hour <= 24
@@ -192,7 +192,7 @@ variable "maintenance_window_hour" {
 }
 
 variable "maintenance_window_day" {
-  description = "Day of week for maintenance window if window type is weekly."
+  description = "The day of the week for the weekly maintenance window. Only used when maintenance_window_type is WEEKLY."
   type        = string
   validation {
     condition = contains([
