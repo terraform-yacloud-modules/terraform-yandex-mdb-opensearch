@@ -46,7 +46,15 @@ No inputs.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_admin_password"></a> [admin\_password](#output\_admin\_password) | OpenSearch cluster admin password |
+| <a name="output_cluster_created_at"></a> [cluster\_created\_at](#output\_cluster\_created\_at) | Creation timestamp of the OpenSearch cluster |
+| <a name="output_cluster_health"></a> [cluster\_health](#output\_cluster\_health) | Health status of the OpenSearch cluster |
+| <a name="output_cluster_id"></a> [cluster\_id](#output\_cluster\_id) | ID of the OpenSearch cluster |
+| <a name="output_cluster_status"></a> [cluster\_status](#output\_cluster\_status) | Status of the OpenSearch cluster |
+| <a name="output_dashboard_fqdns"></a> [dashboard\_fqdns](#output\_dashboard\_fqdns) | FQDNs of OpenSearch Dashboard nodes |
+| <a name="output_hosts"></a> [hosts](#output\_hosts) | List of OpenSearch cluster hosts |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 ## License
