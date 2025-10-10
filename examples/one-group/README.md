@@ -13,7 +13,7 @@ terraform apply
 
 Note that this example may create resources which can cost money. Run `terraform destroy` when you don't need these resources.
 
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
@@ -55,7 +55,7 @@ No inputs.
 | <a name="output_cluster_status"></a> [cluster\_status](#output\_cluster\_status) | Status of the OpenSearch cluster |
 | <a name="output_dashboard_fqdns"></a> [dashboard\_fqdns](#output\_dashboard\_fqdns) | FQDNs of OpenSearch Dashboard nodes |
 | <a name="output_hosts"></a> [hosts](#output\_hosts) | List of OpenSearch cluster hosts |
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- END_TF_DOCS -->
 
 ## License
 
