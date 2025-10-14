@@ -47,4 +47,11 @@ module "opensearch" {
   maintenance_window_type = "WEEKLY"
   maintenance_window_hour = 2
   maintenance_window_day  = "SUN"
+
+  timeouts = {
+    create = "30m"
+    update = "30m"
+    delete = "30m"
+  }
+
 }

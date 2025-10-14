@@ -73,4 +73,15 @@ resource "yandex_mdb_opensearch_cluster" "main" {
     hour = var.maintenance_window_hour
     day  = var.maintenance_window_day
   }
+
+
+  dynamic "timeouts" {
+    for_each = var.timeouts == null ? [] : [var.timeouts]
+    content {
+      create = try(timeouts.value.create, null)
+      update = try(timeouts.value.update, null)
+      delete = try(timeouts.value.delete, null)
+    }
+  }
+
 }
