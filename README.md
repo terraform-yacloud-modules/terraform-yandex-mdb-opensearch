@@ -48,6 +48,7 @@ No modules.
 | <a name="input_dashboard_nodes"></a> [dashboard\_nodes](#input\_dashboard\_nodes) | A map that contains information about OpenSearch dashboard nodes.<br/>    Configuration attributes:<br/>      resources        - (Required) Resources allocated to hosts of this OpenSearch node group.<br/>      hosts\_count      - (Required) Number of hosts in this node group.<br/>      zones\_ids        - (Required) A set of availability zones where hosts of node group may be allocated.<br/>      subnet\_ids       - (Optional) A set of the subnets, to which the hosts belongs. The subnets must be a part of the network to which the cluster belongs.<br/>      assign\_public\_ip - (Optional) Sets whether the hosts should get a public IP address on creation.<br/>      roles            - (Optional) A set of OpenSearch roles assigned to hosts. | <pre>map(object({<br/>    resources = object({<br/>      resource_preset_id = string<br/>      disk_size          = string<br/>      disk_type_id       = string<br/>    })<br/>    hosts_count = number<br/>    zones_ids = optional(<br/>      list(string), ["ru-central1-a", "ru-central1-b", "ru-central1-c"]<br/>    )<br/>    subnet_ids       = optional(list(string), [])<br/>    assign_public_ip = bool<br/>  }))</pre> | `{}` | no |
 | <a name="input_deletion_protection"></a> [deletion\_protection](#input\_deletion\_protection) | Enables deletion protection for the OpenSearch cluster. When enabled, prevents accidental deletion of the cluster and its data. | `bool` | `false` | no |
 | <a name="input_description"></a> [description](#input\_description) | OpenSearch cluster description | `string` | `""` | no |
+| <a name="input_disk_encryption_key_id"></a> [disk\_encryption\_key\_id](#input\_disk\_encryption\_key\_id) | ID of the KMS key for cluster disk encryption. If not specified, encryption will be disabled. | `string` | `null` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | The deployment environment of the OpenSearch cluster. PRESTABLE is for testing and development, PRODUCTION is for production workloads with higher availability and performance guarantees. | `string` | `"PRODUCTION"` | no |
 | <a name="input_folder_id"></a> [folder\_id](#input\_folder\_id) | The ID of the Yandex Cloud Folder that the resources belongs to.<br/><br/>    Allows to create bucket in different folder.<br/>    It will try to create bucket using IAM-token in provider config, not using access\_key.<br/>    If omitted, folder\_id specified in provider config and access\_key is used. | `string` | `null` | no |
 | <a name="input_generate_admin_password"></a> [generate\_admin\_password](#input\_generate\_admin\_password) | If true, a random admin password will be generated for the OpenSearch cluster. If false, the admin\_password variable must be provided. | `bool` | `true` | no |
@@ -62,6 +63,7 @@ No modules.
 | <a name="input_opensearch_version"></a> [opensearch\_version](#input\_opensearch\_version) | The version of OpenSearch to deploy. If not specified, the latest available version will be used. | `string` | `null` | no |
 | <a name="input_security_group_ids"></a> [security\_group\_ids](#input\_security\_group\_ids) | A set of ids of security groups assigned to hosts of the cluster. | `list(string)` | `[]` | no |
 | <a name="input_service_account_id"></a> [service\_account\_id](#input\_service\_account\_id) | The ID of the service account that will be used by the OpenSearch cluster for accessing other Yandex Cloud resources. If not specified, a default service account will be used. | `string` | `null` | no |
+| <a name="input_timeouts"></a> [timeouts](#input\_timeouts) | Timeout settings for cluster operations | <pre>object({<br/>    create = optional(string)<br/>    update = optional(string)<br/>    delete = optional(string)<br/>  })</pre> | `null` | no |
 
 ## Outputs
 
@@ -73,6 +75,7 @@ No modules.
 | <a name="output_cluster_id"></a> [cluster\_id](#output\_cluster\_id) | ID of the OpenSearch cluster |
 | <a name="output_cluster_status"></a> [cluster\_status](#output\_cluster\_status) | The current operational status of the OpenSearch cluster (e.g., RUNNING, STOPPED, STARTING). |
 | <a name="output_dashboard_fqdns"></a> [dashboard\_fqdns](#output\_dashboard\_fqdns) | A list of fully qualified domain names (FQDNs) of the OpenSearch Dashboard nodes for accessing the web interface. |
+| <a name="output_disk_encryption_key_id"></a> [disk\_encryption\_key\_id](#output\_disk\_encryption\_key\_id) | ID of the KMS key used for cluster disk encryption. |
 | <a name="output_hosts"></a> [hosts](#output\_hosts) | A list of all hosts in the OpenSearch cluster, including their FQDNs, IP addresses, and node types. |
 <!-- END_TF_DOCS -->
 

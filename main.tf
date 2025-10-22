@@ -16,8 +16,9 @@ resource "yandex_mdb_opensearch_cluster" "main" {
   service_account_id  = var.service_account_id
   deletion_protection = var.deletion_protection
 
-  network_id         = var.network_id
-  security_group_ids = var.security_group_ids
+  network_id             = var.network_id
+  security_group_ids     = var.security_group_ids
+  disk_encryption_key_id = var.disk_encryption_key_id
 
   config {
     version        = var.opensearch_version
@@ -42,6 +43,7 @@ resource "yandex_mdb_opensearch_cluster" "main" {
             disk_type_id       = node_groups.value.resources.disk_type_id
           }
         }
+
       }
     }
 
@@ -74,13 +76,12 @@ resource "yandex_mdb_opensearch_cluster" "main" {
     day  = var.maintenance_window_day
   }
 
-
   dynamic "timeouts" {
-    for_each = var.timeouts == null ? [] : [var.timeouts]
+    for_each = var.timeouts != null ? [var.timeouts] : []
     content {
-      create = try(timeouts.value.create, null)
-      update = try(timeouts.value.update, null)
-      delete = try(timeouts.value.delete, null)
+      create = timeouts.value.create
+      update = timeouts.value.update
+      delete = timeouts.value.delete
     }
   }
 

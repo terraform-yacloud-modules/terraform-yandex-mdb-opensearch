@@ -36,3 +36,8 @@ output "dashboard_fqdns" {
     host.fqdn if host.type == "DASHBOARDS"
   ]
 }
+
+output "disk_encryption_key_id" {
+  description = "ID of the KMS key used for cluster disk encryption."
+  value       = yandex_mdb_opensearch_cluster.main.disk_encryption_key_id
+}
