@@ -77,7 +77,7 @@ resource "yandex_mdb_opensearch_cluster" "main" {
   }
 
   dynamic "timeouts" {
-    for_each = var.timeouts != null ? [var.timeouts] : []
+    for_each = var.timeouts == null ? [] : [var.timeouts]
     content {
       create = timeouts.value.create
       update = timeouts.value.update
