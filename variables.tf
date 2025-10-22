@@ -95,6 +95,10 @@ variable "admin_password" {
   description = "The password for the admin user of the OpenSearch cluster. Only used if generate_admin_password is false. Must be at least 8 characters long."
   type        = string
   default     = null
+  validation {
+    condition     = var.generate_admin_password || (var.admin_password != null && length(var.admin_password) >= 8)
+    error_message = "If generate_admin_password is false you must provide admin_password with at least 8 characters."
+  }
 }
 
 variable "opensearch_plugins" {
@@ -167,6 +171,15 @@ variable "dashboard_nodes" {
 }
 
 #
+# OpenSearch authentication and encryption
+#
+variable "disk_encryption_key_id" {
+  description = "ID of the KMS key for cluster disk encryption. If not specified, encryption will be disabled."
+  type        = string
+  default     = null
+}
+
+#
 # OpenSearch maintenance
 #
 variable "maintenance_window_type" {
@@ -213,4 +226,3 @@ variable "timeouts" {
   })
   default = null
 }
-

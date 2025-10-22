@@ -22,10 +22,23 @@ module "opensearch" {
   source = "../../"
 
   name                    = "test-opensearch"
+  description             = "Test OpenSearch cluster"
   environment             = "PRESTABLE"
   network_id              = module.network.vpc_id
   folder_id               = data.yandex_client_config.client.folder_id
   generate_admin_password = true
+
+  labels = {
+    environment = "test"
+    project     = "terraform-yandex-mdb-opensearch"
+  }
+
+  service_account_id     = null
+  deletion_protection    = false
+  security_group_ids     = []
+  disk_encryption_key_id = null
+
+  opensearch_plugins = []
 
   opensearch_nodes = {
     group0 = {
