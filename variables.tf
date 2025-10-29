@@ -92,12 +92,13 @@ variable "generate_admin_password" {
   default     = true
 }
 variable "admin_password" {
-  description = "The password for the admin user of the OpenSearch cluster. Only used if generate_admin_password is false. Must be at least 8 characters long."
+  description = "The password for the admin user of the OpenSearch cluster. Only used if generate_admin_password is false. Must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character."
   type        = string
   default     = null
+  sensitive   = true
   validation {
-    condition     = var.generate_admin_password || (var.admin_password != null && length(var.admin_password) >= 8)
-    error_message = "If generate_admin_password is false you must provide admin_password with at least 8 characters."
+    condition     = var.generate_admin_password || (var.admin_password != null && length(var.admin_password) >= 8 && can(regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^a-zA-Z\\d]).{8,}$", var.admin_password)))
+    error_message = "If generate_admin_password is false you must provide admin_password with at least 8 characters, including uppercase, lowercase, digit, and special character."
   }
 }
 
@@ -115,7 +116,7 @@ variable "opensearch_nodes" {
     A map that contains information about OpenSearch cluster nodes.
     Configuration attributes:
       resources        - (Required) Resources allocated to hosts of this OpenSearch node group.
-      hosts_count      - (Required) Number of hosts in this node group.
+      hosts_count      - (Required) Number of hosts in this node group. Must be at least 1.
       zones_ids        - (Required) A set of availability zones where hosts of node group may be allocated.
       subnet_ids       - (Optional) A set of the subnets, to which the hosts belongs. The subnets must be a part of the network to which the cluster belongs.
       assign_public_ip - (Optional) Sets whether the hosts should get a public IP address on creation.
@@ -130,12 +131,32 @@ variable "opensearch_nodes" {
     })
     hosts_count = number
     zones_ids = optional(
-      list(string), ["ru-central1-a", "ru-central1-b", "ru-central1-c"]
+      list(string), ["ru-central1-a", "ru-central1-b", "ru-central1-d"]
     )
     subnet_ids       = optional(list(string))
     assign_public_ip = bool
     roles            = optional(list(string))
   }))
+  validation {
+    condition = alltrue([
+      for group_name, group in var.opensearch_nodes :
+      group.hosts_count >= 1 &&
+      group.hosts_count <= 10 &&
+      can(tonumber(group.resources.disk_size)) &&
+      tonumber(group.resources.disk_size) >= 10737418240 && # 10GB minimum
+      contains(["network-hdd", "network-ssd", "local-ssd", "network-ssd-nonreplicated"], group.resources.disk_type_id) &&
+      alltrue([for zone in group.zones_ids : contains(["ru-central1-a", "ru-central1-b", "ru-central1-d"], zone)]) &&
+      (group.roles == null || alltrue([for role in group.roles : contains(["data", "manager", "ingest", "coordinator"], role)]))
+    ])
+    error_message = <<EOF
+Invalid OpenSearch node configuration:
+- hosts_count must be between 1 and 10
+- disk_size must be at least 10GB (10737418240 bytes)
+- disk_type_id must be one of: network-hdd, network-ssd, local-ssd, network-ssd-nonreplicated
+- zones_ids must contain valid Yandex Cloud availability zones: ru-central1-a, ru-central1-b, ru-central1-d
+- roles must be one of: data, manager, ingest, coordinator
+EOF
+  }
   default = {}
 }
 
@@ -147,7 +168,7 @@ variable "dashboard_nodes" {
     A map that contains information about OpenSearch dashboard nodes.
     Configuration attributes:
       resources        - (Required) Resources allocated to hosts of this OpenSearch node group.
-      hosts_count      - (Required) Number of hosts in this node group.
+      hosts_count      - (Required) Number of hosts in this node group. Must be at least 1.
       zones_ids        - (Required) A set of availability zones where hosts of node group may be allocated.
       subnet_ids       - (Optional) A set of the subnets, to which the hosts belongs. The subnets must be a part of the network to which the cluster belongs.
       assign_public_ip - (Optional) Sets whether the hosts should get a public IP address on creation.
@@ -162,11 +183,29 @@ variable "dashboard_nodes" {
     })
     hosts_count = number
     zones_ids = optional(
-      list(string), ["ru-central1-a", "ru-central1-b", "ru-central1-c"]
+      list(string), ["ru-central1-a", "ru-central1-b", "ru-central1-d"]
     )
     subnet_ids       = optional(list(string), [])
     assign_public_ip = bool
   }))
+  validation {
+    condition = alltrue([
+      for group_name, group in var.dashboard_nodes :
+      group.hosts_count >= 1 &&
+      group.hosts_count <= 5 &&
+      can(tonumber(group.resources.disk_size)) &&
+      tonumber(group.resources.disk_size) >= 10737418240 && # 10GB minimum
+      contains(["network-hdd", "network-ssd", "local-ssd", "network-ssd-nonreplicated"], group.resources.disk_type_id) &&
+      alltrue([for zone in group.zones_ids : contains(["ru-central1-a", "ru-central1-b", "ru-central1-d"], zone)])
+    ])
+    error_message = <<EOF
+Invalid Dashboard node configuration:
+- hosts_count must be between 1 and 5
+- disk_size must be at least 10GB (10737418240 bytes)
+- disk_type_id must be one of: network-hdd, network-ssd, local-ssd, network-ssd-nonreplicated
+- zones_ids must contain valid Yandex Cloud availability zones: ru-central1-a, ru-central1-b, ru-central1-d
+EOF
+  }
   default = {}
 }
 
