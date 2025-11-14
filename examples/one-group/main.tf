@@ -55,7 +55,19 @@ module "opensearch" {
     }
   }
 
-  dashboard_nodes = {}
+  dashboard_nodes = {
+    dashboard0 = {
+      resources = {
+        resource_preset_id = "s2.micro"
+        disk_size          = "10737418240"
+        disk_type_id       = "network-ssd"
+      }
+      hosts_count      = 1
+      zones_ids        = ["ru-central1-a"]
+      subnet_ids       = [module.network.private_subnets_ids[0]]
+      assign_public_ip = true
+    }
+  }
 
   maintenance_window_type = "WEEKLY"
   maintenance_window_hour = 2
@@ -66,5 +78,7 @@ module "opensearch" {
     update = "30m"
     delete = "30m"
   }
+
+  opensearch_version = null
 
 }
