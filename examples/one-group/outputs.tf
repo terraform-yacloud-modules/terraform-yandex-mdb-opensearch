@@ -31,8 +31,5 @@ output "hosts" {
 
 output "dashboard_fqdns" {
   description = "FQDNs of OpenSearch Dashboard nodes"
-  value = [
-    for host in module.opensearch.dashboard_fqdns :
-    host.fqdn if host.type == "DASHBOARDS"
-  ]
+  value       = module.opensearch.dashboard_fqdns
 }
