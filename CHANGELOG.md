@@ -1,3 +1,8 @@
+## v1.39.0 - 2026-02-24
+### Miscellaneous
+- f96b7be Merge pull request [#87](https://github.com/terraform-yacloud-modules/terraform-yandex-mdb-opensearch/pull/87) from terraform-yacloud-modules/dependabot/github_actions/kvendingoldo/git-flow-action-2.16.0
+- 142fca9 build(deps): bump kvendingoldo/git-flow-action from 2.2.0 to 2.16.0
+
 ## v1.38.0
 ## v1.37.0
 ## v1.36.0
