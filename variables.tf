@@ -97,7 +97,7 @@ variable "admin_password" {
   default     = null
   sensitive   = true
   validation {
-    condition     = var.generate_admin_password || (var.admin_password != null && length(var.admin_password) >= 8 && can(regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^a-zA-Z\\d]).{8,}$", var.admin_password)))
+    condition     = var.generate_admin_password || try(var.admin_password != null && length(var.admin_password) >= 8 && can(regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^a-zA-Z\\d]).{8,}$", var.admin_password)), false)
     error_message = "If generate_admin_password is false you must provide admin_password with at least 8 characters, including uppercase, lowercase, digit, and special character."
   }
 }
