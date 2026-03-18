@@ -1,3 +1,9 @@
+## v1.40.0 - 2026-03-18
+### Miscellaneous
+- 72a53e3 fix validation generate_admin_password ([#89](https://github.com/terraform-yacloud-modules/terraform-yandex-mdb-opensearch/pull/89))
+- 5205879 Merge pull request [#88](https://github.com/terraform-yacloud-modules/terraform-yandex-mdb-opensearch/pull/88) from terraform-yacloud-modules/dependabot/github_actions/hashicorp/setup-terraform-4
+- fdc0afb build(deps): bump hashicorp/setup-terraform from 3 to 4
+
 ## v1.39.0 - 2026-02-24
 ### Miscellaneous
 - f96b7be Merge pull request [#87](https://github.com/terraform-yacloud-modules/terraform-yandex-mdb-opensearch/pull/87) from terraform-yacloud-modules/dependabot/github_actions/kvendingoldo/git-flow-action-2.16.0
