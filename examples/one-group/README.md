@@ -54,6 +54,7 @@ No inputs.
 | <a name="output_cluster_id"></a> [cluster\_id](#output\_cluster\_id) | ID of the OpenSearch cluster |
 | <a name="output_cluster_status"></a> [cluster\_status](#output\_cluster\_status) | Status of the OpenSearch cluster |
 | <a name="output_dashboard_fqdns"></a> [dashboard\_fqdns](#output\_dashboard\_fqdns) | FQDNs of OpenSearch Dashboard nodes |
+| <a name="output_disk_encryption_key_id"></a> [disk\_encryption\_key\_id](#output\_disk\_encryption\_key\_id) | ID of the KMS key used for cluster disk encryption |
 | <a name="output_hosts"></a> [hosts](#output\_hosts) | List of OpenSearch cluster hosts |
 <!-- END_TF_DOCS -->
 

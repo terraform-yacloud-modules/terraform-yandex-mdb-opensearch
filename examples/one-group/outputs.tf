@@ -33,3 +33,8 @@ output "dashboard_fqdns" {
   description = "FQDNs of OpenSearch Dashboard nodes"
   value       = module.opensearch.dashboard_fqdns
 }
+
+output "disk_encryption_key_id" {
+  description = "ID of the KMS key used for cluster disk encryption"
+  value       = module.opensearch.disk_encryption_key_id
+}

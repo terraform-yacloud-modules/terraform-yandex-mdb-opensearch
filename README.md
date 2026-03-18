@@ -1,8 +1,10 @@
 # Yandex Cloud OpenSearch Terraform module
 
-[![Github tag](https://img.shields.io/github/v/tag/terraform-yacloud-modules/terraform-yandex-mdb-opensearch)](https://github.com/terraform-yacloud-modules/terraform-yandex-mdb-opensearch/releases) [![support opentofu](https://img.shields.io/badge/supports-opentofu-green)](https://opentofu.org/) ![maintenance status](https://img.shields.io/maintenance/yes/2024.svg)
+[![Github tag](https://img.shields.io/github/v/tag/terraform-yacloud-modules/terraform-yandex-mdb-opensearch)](https://github.com/terraform-yacloud-modules/terraform-yandex-mdb-opensearch/releases) [![support opentofu](https://img.shields.io/badge/supports-opentofu-green)](https://opentofu.org/) ![maintenance status](https://img.shields.io/maintenance/yes/2025.svg)
 
 Terraform module which creates Yandex Cloud OpenSearch resources.
+
+Official resource docs: [yandex_mdb_opensearch_cluster](https://yandex.cloud/ru/docs/terraform/resources/mdb_opensearch_cluster).
 
 ## Examples
 
