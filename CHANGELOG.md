@@ -1,3 +1,7 @@
+## v1.41.0 - 2026-08-29
+### Miscellaneous
+- 23a8910 build(deps): bump actions/cache from 5.0.3 to 5.0.5 ([#91](https://github.com/terraform-yacloud-modules/terraform-yandex-mdb-opensearch/pull/91))
+
 ## v1.40.0 - 2026-03-18
 ### Miscellaneous
 - 72a53e3 fix validation generate_admin_password ([#89](https://github.com/terraform-yacloud-modules/terraform-yandex-mdb-opensearch/pull/89))
