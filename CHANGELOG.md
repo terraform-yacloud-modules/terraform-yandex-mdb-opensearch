@@ -1,3 +1,7 @@
+## v1.42.0 - 2026-09-01
+### Miscellaneous
+- b71341e build(deps): bump actions/cache from 5.0.5 to 6.1.0 ([#94](https://github.com/terraform-yacloud-modules/terraform-yandex-mdb-opensearch/pull/94))
+
 ## v1.41.0 - 2026-08-29
 ### Miscellaneous
 - 23a8910 build(deps): bump actions/cache from 5.0.3 to 5.0.5 ([#91](https://github.com/terraform-yacloud-modules/terraform-yandex-mdb-opensearch/pull/91))
