@@ -1,3 +1,8 @@
+## v1.43.0 - 2026-09-01
+### Miscellaneous
+- 7713b52 Merge pull request [#93](https://github.com/terraform-yacloud-modules/terraform-yandex-mdb-opensearch/pull/93) from terraform-yacloud-modules/dependabot/github_actions/actions/checkout-7
+- 75bfec5 build(deps): bump actions/checkout from 6 to 7
+
 ## v1.42.0 - 2026-09-01
 ### Miscellaneous
 - b71341e build(deps): bump actions/cache from 5.0.5 to 6.1.0 ([#94](https://github.com/terraform-yacloud-modules/terraform-yandex-mdb-opensearch/pull/94))
