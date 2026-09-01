@@ -1,9 +1,12 @@
 data "yandex_client_config" "client" {}
 
+provider "yandex" {
+}
+
 module "network" {
   source = "git::https://github.com/terraform-yacloud-modules/terraform-yandex-vpc.git?ref=v1.0.0"
 
-  folder_id = data.yandex_client_config.client.folder_id
+  folder_id = coalesce(var.folder_id, data.yandex_client_config.client.folder_id)
 
   blank_name = "vpc-nat-gateway"
   labels = {
@@ -25,7 +28,7 @@ module "opensearch" {
   description             = "Test OpenSearch cluster"
   environment             = "PRESTABLE"
   network_id              = module.network.vpc_id
-  folder_id               = data.yandex_client_config.client.folder_id
+  folder_id               = coalesce(var.folder_id, data.yandex_client_config.client.folder_id)
   generate_admin_password = true
 
   labels = {
