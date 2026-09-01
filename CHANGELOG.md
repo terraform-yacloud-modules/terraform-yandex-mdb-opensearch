@@ -1,3 +1,10 @@
+## v1.44.0 - 2026-09-01
+### Bug Fixes
+- e61401b fix: передача folder_id в примере с приоритетом tfvars над YC_FOLDER_ID
+
+### Miscellaneous
+- f35ebec Merge pull request [#92](https://github.com/terraform-yacloud-modules/terraform-yandex-mdb-opensearch/pull/92) from terraform-yacloud-modules/feature/add-folder-id-tfvars
+
 ## v1.43.0 - 2026-09-01
 ### Miscellaneous
 - 7713b52 Merge pull request [#93](https://github.com/terraform-yacloud-modules/terraform-yandex-mdb-opensearch/pull/93) from terraform-yacloud-modules/dependabot/github_actions/actions/checkout-7
