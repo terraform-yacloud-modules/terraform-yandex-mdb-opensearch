@@ -44,7 +44,9 @@ Note that this example may create resources which can cost money. Run `terraform
 
 ## Inputs
 
-No inputs.
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_folder_id"></a> [folder\_id](#input\_folder\_id) | ID каталога Yandex Cloud, в котором создаются ресурсы. Имеет приоритет над YC\_FOLDER\_ID. | `string` | `null` | no |
 
 ## Outputs
 
