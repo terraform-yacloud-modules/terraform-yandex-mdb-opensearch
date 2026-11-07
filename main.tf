@@ -24,18 +24,29 @@ resource "yandex_mdb_opensearch_cluster" "main" {
     version        = var.opensearch_version
     admin_password = var.generate_admin_password ? random_password.admin_password[0].result : var.admin_password
 
+    dynamic "access" {
+      for_each = var.access == null ? [] : [var.access]
+      content {
+        data_transfer = access.value.data_transfer
+      }
+    }
+
+    audit_log = var.audit_log
+
     opensearch {
       plugins = var.opensearch_plugins
+      config  = var.opensearch_config
 
       dynamic "node_groups" {
         for_each = var.opensearch_nodes
         content {
-          name             = node_groups.key
-          hosts_count      = node_groups.value.hosts_count
-          zone_ids         = node_groups.value.zones_ids
-          subnet_ids       = node_groups.value.subnet_ids
-          assign_public_ip = node_groups.value.assign_public_ip
-          roles            = node_groups.value.roles
+          name                  = node_groups.key
+          hosts_count           = node_groups.value.hosts_count
+          zone_ids              = node_groups.value.zones_ids
+          subnet_ids            = node_groups.value.subnet_ids
+          assign_public_ip      = node_groups.value.assign_public_ip
+          roles                 = node_groups.value.roles
+          disk_size_autoscaling = node_groups.value.disk_size_autoscaling
 
           resources {
             resource_preset_id = node_groups.value.resources.resource_preset_id
