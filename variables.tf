@@ -177,7 +177,7 @@ variable "opensearch_nodes" {
       disk_size_autoscaling - (Optional) Automatic disk size expansion settings.
         disk_size_limit           - Maximum disk size in bytes. Exactly one of disk_size_limit or disk_size_gb_limit must be set.
         disk_size_gb_limit        - Maximum disk size in GiB. Exactly one of disk_size_limit or disk_size_gb_limit must be set.
-        planned_usage_threshold   - Storage usage percentage that triggers expansion during the maintenance window. Provider v0.244.0 accepts only 0.
+        planned_usage_threshold   - Storage usage percentage that triggers expansion during the maintenance window. Provider v0.244.0 accepts only 0 (older provider versions accept 0-100).
         emergency_usage_threshold - Storage usage percentage that triggers immediate expansion.
   EOF
   nullable    = false
