@@ -1,3 +1,7 @@
+## v1.45.0 - 2026-11-14
+### Features
+- fcb88d3 feat: add OpenSearch config, audit log, service access and disk autoscaling ([#96](https://github.com/terraform-yacloud-modules/terraform-yandex-mdb-opensearch/pull/96))
+
 ## v1.44.0 - 2026-09-01
 ### Bug Fixes
 - e61401b fix: передача folder_id в примере с приоритетом tfvars над YC_FOLDER_ID
