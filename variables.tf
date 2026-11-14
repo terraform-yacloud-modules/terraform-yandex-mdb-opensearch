@@ -108,6 +108,59 @@ variable "opensearch_plugins" {
   default     = []
 }
 
+variable "opensearch_config" {
+  description = <<EOF
+    OpenSearch server configuration settings.
+    Configuration attributes:
+      fielddata_cache_size         - (Optional) Maximum size of the field data cache. Can be an absolute value (for example, 8GB) or a percentage of the node heap (for example, 50%).
+      http_max_initial_line_length - (Optional) Maximum length allowed for HTTP URLs in the initial request line (for example, 4kb).
+      max_clause_count             - (Optional) Maximum product of fields and terms that are queryable simultaneously.
+      reindex_remote_whitelist     - (Optional) Comma-separated list of remote hosts allowed for reindexing, in <host_address>:<port> format.
+      search_max_buckets           - (Optional) Maximum number of aggregation buckets allowed in a single response.
+  EOF
+  type = object({
+    fielddata_cache_size         = optional(string)
+    http_max_initial_line_length = optional(string)
+    max_clause_count             = optional(number)
+    reindex_remote_whitelist     = optional(string)
+    search_max_buckets           = optional(number)
+  })
+  default = null
+}
+
+variable "audit_log" {
+  description = <<EOF
+    OpenSearch audit log settings.
+    If omitted, audit logging settings are not managed by the module.
+  EOF
+  type = object({
+    compliance_enabled         = optional(bool, false)
+    log_authenticated_requests = optional(bool, false)
+    log_backup_operations      = optional(bool, false)
+    log_bad_headers            = optional(bool, false)
+    log_data_modifications     = optional(bool, false)
+    log_index_events           = optional(bool, false)
+    log_index_maintenance      = optional(bool, false)
+    log_index_metadata_access  = optional(bool, false)
+    log_monitoring_checks      = optional(bool, false)
+    log_request_body           = optional(bool, false)
+    log_search_queries         = optional(bool, false)
+  })
+  default = null
+}
+
+variable "access" {
+  description = <<EOF
+    Access to the OpenSearch cluster from other Yandex Cloud services.
+    Configuration attributes:
+      data_transfer - (Optional) Enable access to Data Transfer.
+  EOF
+  type = object({
+    data_transfer = optional(bool, false)
+  })
+  default = null
+}
+
 #
 # OpenSearch nodes
 #
@@ -115,12 +168,17 @@ variable "opensearch_nodes" {
   description = <<EOF
     A map that contains information about OpenSearch cluster nodes.
     Configuration attributes:
-      resources        - (Required) Resources allocated to hosts of this OpenSearch node group.
-      hosts_count      - (Required) Number of hosts in this node group. Must be at least 1.
-      zones_ids        - (Required) A set of availability zones where hosts of node group may be allocated.
-      subnet_ids       - (Optional) A set of the subnets, to which the hosts belongs. The subnets must be a part of the network to which the cluster belongs.
-      assign_public_ip - (Optional) Sets whether the hosts should get a public IP address on creation.
-      roles            - (Optional) A set of OpenSearch roles assigned to hosts.
+      resources             - (Required) Resources allocated to hosts of this OpenSearch node group.
+      hosts_count           - (Required) Number of hosts in this node group. Must be at least 1.
+      zones_ids             - (Required) A set of availability zones where hosts of node group may be allocated.
+      subnet_ids            - (Optional) A set of the subnets, to which the hosts belongs. The subnets must be a part of the network to which the cluster belongs.
+      assign_public_ip      - (Optional) Sets whether the hosts should get a public IP address on creation.
+      roles                 - (Optional) A set of OpenSearch roles assigned to hosts. Available roles are data, manager, warm and ingest.
+      disk_size_autoscaling - (Optional) Automatic disk size expansion settings.
+        disk_size_limit           - Maximum disk size in bytes. Exactly one of disk_size_limit or disk_size_gb_limit must be set.
+        disk_size_gb_limit        - Maximum disk size in GiB. Exactly one of disk_size_limit or disk_size_gb_limit must be set.
+        planned_usage_threshold   - Storage usage percentage that triggers expansion during the maintenance window. Provider v0.244.0 accepts only 0 (older provider versions accept 0-100).
+        emergency_usage_threshold - Storage usage percentage that triggers immediate expansion.
   EOF
   nullable    = false
   type = map(object({
@@ -136,6 +194,12 @@ variable "opensearch_nodes" {
     subnet_ids       = optional(list(string))
     assign_public_ip = bool
     roles            = optional(list(string))
+    disk_size_autoscaling = optional(object({
+      disk_size_limit           = optional(number)
+      disk_size_gb_limit        = optional(number)
+      planned_usage_threshold   = optional(number, 0)
+      emergency_usage_threshold = optional(number, 0)
+    }))
   }))
   validation {
     condition = alltrue([
@@ -146,7 +210,15 @@ variable "opensearch_nodes" {
       tonumber(group.resources.disk_size) >= 10737418240 && # 10GB minimum
       contains(["network-hdd", "network-ssd", "local-ssd", "network-ssd-nonreplicated"], group.resources.disk_type_id) &&
       alltrue([for zone in group.zones_ids : contains(["ru-central1-a", "ru-central1-b", "ru-central1-d"], zone)]) &&
-      (group.roles == null || alltrue([for role in group.roles : contains(["data", "manager", "ingest", "coordinator"], role)]))
+      (group.roles == null || alltrue([for role in group.roles : contains(["data", "manager", "warm", "ingest"], role)])) &&
+      (group.disk_size_autoscaling == null ? true : (
+        (group.disk_size_autoscaling.disk_size_limit != null || group.disk_size_autoscaling.disk_size_gb_limit != null) &&
+        !(group.disk_size_autoscaling.disk_size_limit != null && group.disk_size_autoscaling.disk_size_gb_limit != null) &&
+        group.disk_size_autoscaling.planned_usage_threshold >= 0 &&
+        group.disk_size_autoscaling.planned_usage_threshold <= 100 &&
+        group.disk_size_autoscaling.emergency_usage_threshold >= 0 &&
+        group.disk_size_autoscaling.emergency_usage_threshold <= 100
+      ))
     ])
     error_message = <<EOF
 Invalid OpenSearch node configuration:
@@ -154,7 +226,9 @@ Invalid OpenSearch node configuration:
 - disk_size must be at least 10GB (10737418240 bytes)
 - disk_type_id must be one of: network-hdd, network-ssd, local-ssd, network-ssd-nonreplicated
 - zones_ids must contain valid Yandex Cloud availability zones: ru-central1-a, ru-central1-b, ru-central1-d
-- roles must be one of: data, manager, ingest, coordinator
+- roles must be one of: data, manager, warm, ingest
+- disk_size_autoscaling must set exactly one of disk_size_limit or disk_size_gb_limit
+- disk_size_autoscaling thresholds must be between 0 and 100
 EOF
   }
   default = {}
@@ -172,7 +246,6 @@ variable "dashboard_nodes" {
       zones_ids        - (Required) A set of availability zones where hosts of node group may be allocated.
       subnet_ids       - (Optional) A set of the subnets, to which the hosts belongs. The subnets must be a part of the network to which the cluster belongs.
       assign_public_ip - (Optional) Sets whether the hosts should get a public IP address on creation.
-      roles            - (Optional) A set of OpenSearch roles assigned to hosts.
   EOF
   nullable    = false
   type = map(object({
