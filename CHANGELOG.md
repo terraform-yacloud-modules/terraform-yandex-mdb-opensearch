@@ -1,3 +1,7 @@
+## v1.46.0 - 2026-11-18
+### Miscellaneous
+- aeba9fd ci: run semver job only on push to main ([#97](https://github.com/terraform-yacloud-modules/terraform-yandex-mdb-opensearch/pull/97))
+
 ## v1.45.0 - 2026-11-14
 ### Features
 - fcb88d3 feat: add OpenSearch config, audit log, service access and disk autoscaling ([#96](https://github.com/terraform-yacloud-modules/terraform-yandex-mdb-opensearch/pull/96))
