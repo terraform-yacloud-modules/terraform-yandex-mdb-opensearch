@@ -162,6 +162,41 @@ variable "access" {
 }
 
 #
+# OpenSearch Dashboards authentication
+#
+variable "auth_settings" {
+  description = <<EOF
+    Authentication settings for OpenSearch Dashboards.
+    If omitted, authentication settings are not managed by the module.
+    Configuration attributes:
+      saml - (Optional) SAML authentication options.
+        enabled                   - (Required) Enables SAML authentication.
+        idp_entity_id             - (Required) ID of the SAML Identity Provider (issuer).
+        idp_metadata_file_content - (Required) Identity Provider metadata file content in XML format.
+        sp_entity_id              - (Required) Service provider entity ID (Audience URI).
+        dashboards_url            - (Required) URL of the OpenSearch Dashboards host.
+        roles_key                 - (Optional) Name of the SAML response attribute that stores roles.
+        subject_key               - (Optional) Name of the SAML response attribute that stores the subject.
+  EOF
+  type = object({
+    saml = optional(object({
+      enabled                   = bool
+      idp_entity_id             = string
+      idp_metadata_file_content = string
+      sp_entity_id              = string
+      dashboards_url            = string
+      roles_key                 = optional(string)
+      subject_key               = optional(string)
+    }))
+  })
+  default = null
+  validation {
+    condition     = var.auth_settings == null || length(var.dashboard_nodes) > 0
+    error_message = "auth_settings requires at least one node group in dashboard_nodes."
+  }
+}
+
+#
 # OpenSearch nodes
 #
 variable "opensearch_nodes" {
@@ -169,6 +204,10 @@ variable "opensearch_nodes" {
     A map that contains information about OpenSearch cluster nodes.
     Configuration attributes:
       resources             - (Required) Resources allocated to hosts of this OpenSearch node group.
+        resource_preset_id - (Required) ID of the compute resource preset.
+        disk_size          - (Optional) Disk size in bytes. Exactly one of disk_size or disk_size_gb must be set. Must be at least 10 GiB.
+        disk_size_gb       - (Optional) Disk size in GiB. Exactly one of disk_size or disk_size_gb must be set. Must be at least 10.
+        disk_type_id       - (Required) Disk type ID.
       hosts_count           - (Required) Number of hosts in this node group. Must be at least 1.
       zones_ids             - (Required) A set of availability zones where hosts of node group may be allocated.
       subnet_ids            - (Optional) A set of the subnets, to which the hosts belongs. The subnets must be a part of the network to which the cluster belongs.
@@ -184,7 +223,8 @@ variable "opensearch_nodes" {
   type = map(object({
     resources = object({
       resource_preset_id = string
-      disk_size          = string
+      disk_size          = optional(string)
+      disk_size_gb       = optional(number)
       disk_type_id       = string
     })
     hosts_count = number
@@ -206,8 +246,10 @@ variable "opensearch_nodes" {
       for group_name, group in var.opensearch_nodes :
       group.hosts_count >= 1 &&
       group.hosts_count <= 10 &&
-      can(tonumber(group.resources.disk_size)) &&
-      tonumber(group.resources.disk_size) >= 10737418240 && # 10GB minimum
+      (group.resources.disk_size != null || group.resources.disk_size_gb != null) &&
+      !(group.resources.disk_size != null && group.resources.disk_size_gb != null) &&
+      (group.resources.disk_size == null ? true : (can(tonumber(group.resources.disk_size)) && tonumber(group.resources.disk_size) >= 10737418240)) &&
+      (group.resources.disk_size_gb == null ? true : group.resources.disk_size_gb >= 10) &&
       contains(["network-hdd", "network-ssd", "local-ssd", "network-ssd-nonreplicated"], group.resources.disk_type_id) &&
       alltrue([for zone in group.zones_ids : contains(["ru-central1-a", "ru-central1-b", "ru-central1-d"], zone)]) &&
       (group.roles == null || alltrue([for role in group.roles : contains(["data", "manager", "warm", "ingest"], role)])) &&
@@ -223,7 +265,8 @@ variable "opensearch_nodes" {
     error_message = <<EOF
 Invalid OpenSearch node configuration:
 - hosts_count must be between 1 and 10
-- disk_size must be at least 10GB (10737418240 bytes)
+- disk_size must be at least 10GB (10737418240 bytes) or disk_size_gb must be at least 10
+- exactly one of disk_size or disk_size_gb must be set
 - disk_type_id must be one of: network-hdd, network-ssd, local-ssd, network-ssd-nonreplicated
 - zones_ids must contain valid Yandex Cloud availability zones: ru-central1-a, ru-central1-b, ru-central1-d
 - roles must be one of: data, manager, warm, ingest
@@ -242,6 +285,10 @@ variable "dashboard_nodes" {
     A map that contains information about OpenSearch dashboard nodes.
     Configuration attributes:
       resources        - (Required) Resources allocated to hosts of this OpenSearch node group.
+        resource_preset_id - (Required) ID of the compute resource preset.
+        disk_size          - (Optional) Disk size in bytes. Exactly one of disk_size or disk_size_gb must be set. Must be at least 10 GiB.
+        disk_size_gb       - (Optional) Disk size in GiB. Exactly one of disk_size or disk_size_gb must be set. Must be at least 10.
+        disk_type_id       - (Required) Disk type ID.
       hosts_count      - (Required) Number of hosts in this node group. Must be at least 1.
       zones_ids        - (Required) A set of availability zones where hosts of node group may be allocated.
       subnet_ids       - (Optional) A set of the subnets, to which the hosts belongs. The subnets must be a part of the network to which the cluster belongs.
@@ -251,7 +298,8 @@ variable "dashboard_nodes" {
   type = map(object({
     resources = object({
       resource_preset_id = string
-      disk_size          = string
+      disk_size          = optional(string)
+      disk_size_gb       = optional(number)
       disk_type_id       = string
     })
     hosts_count = number
@@ -266,15 +314,18 @@ variable "dashboard_nodes" {
       for group_name, group in var.dashboard_nodes :
       group.hosts_count >= 1 &&
       group.hosts_count <= 5 &&
-      can(tonumber(group.resources.disk_size)) &&
-      tonumber(group.resources.disk_size) >= 10737418240 && # 10GB minimum
+      (group.resources.disk_size != null || group.resources.disk_size_gb != null) &&
+      !(group.resources.disk_size != null && group.resources.disk_size_gb != null) &&
+      (group.resources.disk_size == null ? true : (can(tonumber(group.resources.disk_size)) && tonumber(group.resources.disk_size) >= 10737418240)) &&
+      (group.resources.disk_size_gb == null ? true : group.resources.disk_size_gb >= 10) &&
       contains(["network-hdd", "network-ssd", "local-ssd", "network-ssd-nonreplicated"], group.resources.disk_type_id) &&
       alltrue([for zone in group.zones_ids : contains(["ru-central1-a", "ru-central1-b", "ru-central1-d"], zone)])
     ])
     error_message = <<EOF
 Invalid Dashboard node configuration:
 - hosts_count must be between 1 and 5
-- disk_size must be at least 10GB (10737418240 bytes)
+- disk_size must be at least 10GB (10737418240 bytes) or disk_size_gb must be at least 10
+- exactly one of disk_size or disk_size_gb must be set
 - disk_type_id must be one of: network-hdd, network-ssd, local-ssd, network-ssd-nonreplicated
 - zones_ids must contain valid Yandex Cloud availability zones: ru-central1-a, ru-central1-b, ru-central1-d
 EOF

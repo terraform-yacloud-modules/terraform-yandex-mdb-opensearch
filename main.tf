@@ -51,6 +51,7 @@ resource "yandex_mdb_opensearch_cluster" "main" {
           resources {
             resource_preset_id = node_groups.value.resources.resource_preset_id
             disk_size          = node_groups.value.resources.disk_size
+            disk_size_gb       = node_groups.value.resources.disk_size_gb
             disk_type_id       = node_groups.value.resources.disk_type_id
           }
         }
@@ -73,6 +74,7 @@ resource "yandex_mdb_opensearch_cluster" "main" {
             resources {
               resource_preset_id = node_groups.value.resources.resource_preset_id
               disk_size          = node_groups.value.resources.disk_size
+              disk_size_gb       = node_groups.value.resources.disk_size_gb
               disk_type_id       = node_groups.value.resources.disk_type_id
             }
           }
@@ -86,6 +88,8 @@ resource "yandex_mdb_opensearch_cluster" "main" {
     hour = var.maintenance_window_hour
     day  = var.maintenance_window_day
   }
+
+  auth_settings = var.auth_settings
 
   dynamic "timeouts" {
     for_each = var.timeouts == null ? [] : [var.timeouts]
