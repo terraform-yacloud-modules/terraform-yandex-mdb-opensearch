@@ -19,37 +19,39 @@ Note that this example may create resources which can cost money. Run `terraform
 ## Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3 |
-| <a name="requirement_yandex"></a> [yandex](#requirement\_yandex) | >= 0.72.0 |
+| <a name="requirement_yandex"></a> [yandex](#requirement\_yandex) | >= 0.229.0 |
 
 ## Providers
 
 | Name | Version |
-|------|---------|
-| <a name="provider_yandex"></a> [yandex](#provider\_yandex) | >= 0.72.0 |
+| ---- | ------- |
+| <a name="provider_yandex"></a> [yandex](#provider\_yandex) | >= 0.229.0 |
 
 ## Modules
 
 | Name | Source | Version |
-|------|--------|---------|
+| ---- | ------ | ------- |
 | <a name="module_network"></a> [network](#module\_network) | git::https://github.com/terraform-yacloud-modules/terraform-yandex-vpc.git | v1.0.0 |
 | <a name="module_opensearch"></a> [opensearch](#module\_opensearch) | ../../ | n/a |
 
 ## Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [yandex_client_config.client](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/data-sources/client_config) | data source |
 
 ## Inputs
 
-No inputs.
+| Name | Description | Type | Default | Required |
+| ---- | ----------- | ---- | ------- | :------: |
+| <a name="input_folder_id"></a> [folder\_id](#input\_folder\_id) | ID каталога Yandex Cloud, в котором создаются ресурсы. Имеет приоритет над YC\_FOLDER\_ID. | `string` | `null` | no |
 
 ## Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_admin_password"></a> [admin\_password](#output\_admin\_password) | OpenSearch cluster admin password |
 | <a name="output_cluster_created_at"></a> [cluster\_created\_at](#output\_cluster\_created\_at) | Creation timestamp of the OpenSearch cluster |
 | <a name="output_cluster_health"></a> [cluster\_health](#output\_cluster\_health) | Health status of the OpenSearch cluster |

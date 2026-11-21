@@ -63,11 +63,25 @@ module "opensearch" {
     data_transfer = true
   }
 
+  # Example SAML settings. Replace sp_entity_id and dashboards_url with the
+  # real cluster URLs: https://c-<cluster_id>.rw.mdb.yandexcloud.net/
+  auth_settings = {
+    saml = {
+      enabled                   = true
+      idp_entity_id             = "https://idp.example.com/metadata"
+      idp_metadata_file_content = file("${path.module}/saml_metadata.xml")
+      sp_entity_id              = "https://c-example.rw.mdb.yandexcloud.net/"
+      dashboards_url            = "https://c-example.rw.mdb.yandexcloud.net/"
+      roles_key                 = "roles"
+      subject_key               = "sub"
+    }
+  }
+
   opensearch_nodes = {
     group0 = {
       resources = {
         resource_preset_id = "s2.micro"
-        disk_size          = "10737418240"
+        disk_size_gb       = 10
         disk_type_id       = "network-ssd"
       }
       hosts_count      = 1
@@ -87,7 +101,7 @@ module "opensearch" {
     dashboard0 = {
       resources = {
         resource_preset_id = "s2.micro"
-        disk_size          = "10737418240"
+        disk_size_gb       = 10
         disk_type_id       = "network-ssd"
       }
       hosts_count      = 1
